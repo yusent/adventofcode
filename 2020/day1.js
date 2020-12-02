@@ -2,15 +2,15 @@ const fs = require('fs');
 
 fs.readFile('day1-input', 'utf8', (_, data) => {
   const expenses = data.split('\n').map(Number);
-  console.log('Part 1:', findPairMultiplication(2020, expenses));
+  console.log('Part 1:', findPairMultiplication(expenses));
   console.log('Part 2:', findTripleMultiplication(expenses));
 });
 
-const findPairMultiplication = (sum, values) => {
+const findPairMultiplication = values => {
   const prev = new Set();
 
   for (const value of values) {
-    const complement = sum - value;
+    const complement = 2020 - value;
 
     if (prev.has(complement))
       return value * complement;
