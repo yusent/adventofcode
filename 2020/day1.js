@@ -1,26 +1,35 @@
 const fs = require('fs');
 
 fs.readFile('day1-input', 'utf8', (_, data) => {
-  const expenses = new Set(data.split('\n').map(Number));
+  const expenses = data.split('\n').map(Number);
   console.log('Part 1', findPairMultiplication(2020, expenses));
   console.log('Part 2', findTripleMultiplication(expenses));
 });
 
 const findPairMultiplication = (sum, values) => {
+  const prev = new Set();
+
   for (const value of values) {
     const complement = sum - value;
 
-    if (values.has(complement))
+    if (prev.has(complement))
       return value * complement;
+    else
+      prev.add(value);
   }
 };
 
 const findTripleMultiplication = values => {
-  for (const value of values) {
-    const complement = 2020 - value;
-    const pairMult = findPairMultiplication(complement, values);
+  const sums = { [values[0] + values[1]]: values.slice(0,2) };
+  const len = values.length;
 
-    if (pairMult)
-      return value * pairMult;
+  for (let i in values) {
+    const complement = 2020 - values[i];
+
+    if (sums[complement])
+      return sums[complement][0] * sums[complement][1] * values[i];
+
+    for (let j = 0; j < i; j++)
+      sums[values[i] + values[j]] = [values[i], values[j]];
   }
 };
