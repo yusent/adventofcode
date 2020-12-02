@@ -1,7 +1,7 @@
-fs = require('fs');
+const fs = require('fs');
 
 fs.readFile('day1-input', 'utf8', (_, data) => {
-  expenses = new Set(data.split('\n').map(Number));
+  const expenses = new Set(data.split('\n').map(Number));
   console.log('Part 1', findPairMultiplication(2020, expenses));
   console.log('Part 2', findTripleMultiplication(expenses));
 });

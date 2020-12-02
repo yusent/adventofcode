@@ -1,32 +1,26 @@
 const fs = require('fs');
 
-fs.readFile('day2-input', 'utf8', (error, data) => {
-  const lines = data.split('\n');
-  const validPasswordsCount1 = lines
-    .reduce((count, line) => {
-      return line && checkPasswordLine1(line) ? count + 1 : count;
-    }, 0);
-  const validPasswordsCount2 = lines
-    .reduce((count, line) => {
-      return line && checkPasswordLine2(line) ? count + 1 : count;
-    }, 0);
+fs.readFile('day2-input', 'utf8', (_, data) => {
+  const cases = data.trim().split('\n').map(parseLine);
 
-  console.log('Part 1:', validPasswordsCount1);
-  console.log('Part 2:', validPasswordsCount2);
+  console.log('Part 1:', count(cases, check1));
+  console.log('Part 2:', count(cases, check2));
 });
 
-const checkPasswordLine1 = line => {
-  const [_, min, max, char, password] = /^(\d+)-(\d+) (\w): (\w+)$/.exec(line);
-  const occurrences = (password.match(new RegExp(char, 'g')) || []).length;
-
-  return occurrences >= min && occurrences <= max;
+const parseLine = line => {
+  const [_, l, r, char, password] = /^(\d+)-(\d+) (\w): (\w+)$/.exec(line);
+  return { l, r, char, password };
 };
 
-const checkPasswordLine2 = line => {
-  const [_, pos0, pos1, char, password] = /^(\d+)-(\d+) (\w): (\w+)$/.exec(line);
-
-  if (password[pos0 - 1] === char)
-    return password[pos1 - 1] !== char;
-  else
-    return password[pos1 - 1] === char;
+const check1 = ({ l, r, char, password }) => {
+  const match = password.match(new RegExp(char, 'g'));
+  return match && between(match.length, l, r);
 };
+
+const check2 = ({ l, r, char, password }) => (
+  xor(password[l - 1] === char, password[r - 1] === char)
+);
+
+const count = (list, pred) => list.reduce((c, x) => pred(x) ? c + 1 : c, 0);
+const between = (x, l, r) => x >= l && x <= r;
+const xor = (cond0, cond1) => cond0 ? !cond1 : cond1;
