@@ -4,7 +4,9 @@ import qualified Data.Map.Strict as M (Map, (!), empty, insert, member)
 main :: IO ()
 main = do
   expenses <- map read . lines <$> readFile "day1-input"
+  putStr "Part 1: "
   print $ findPairMultiplication empty expenses
+  putStr "Part 2: "
   print $ findTripleMultiplication M.empty [] expenses
 
 findPairMultiplication :: Set Int -> [Int] -> Int
