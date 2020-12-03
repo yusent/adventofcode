@@ -11,7 +11,7 @@ defmodule M do
   def check1(%{"l" => l, "r" => r, "char" => char, "password" => password}) do
     password
     |> String.graphemes()
-    |> Enum.reduce(0, &(if &1 == char, do: &2 + 1, else: &2))
+    |> Enum.count(&(&1 == char))
     |> (&(&1 >= l and &1 <= r)).()
   end
 
