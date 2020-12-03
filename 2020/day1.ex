@@ -2,7 +2,7 @@ defmodule M do
   def find_pair_multiplication(prev, [value | values]) do
     complement = 2020 - value
 
-    if (MapSet.member?(prev, complement)) do
+    if MapSet.member?(prev, complement) do
       value * complement
     else
       find_pair_multiplication(MapSet.put(prev, value), values)
@@ -12,7 +12,7 @@ defmodule M do
   def find_triple_multiplication(sums, prev, [value | values]) do
     complement = Map.get(sums, 2020 - value)
 
-    if (complement) do
+    if complement do
       value * complement
     else
       prev
