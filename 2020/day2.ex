@@ -16,7 +16,7 @@ defmodule M do
   end
 
   def check2(%{"l" => l, "r" => r, "char" => char, "password" => password}) do
-    (String.at(password, l - 1) == char) != (String.at(password, r - 1) == char)
+    String.at(password, l - 1) == char != (String.at(password, r - 1) == char)
   end
 end
 
@@ -28,9 +28,10 @@ end
   |> String.split("\n")
   |> Enum.reduce({0, 0}, fn line, {c1, c2} ->
     data = M.parse_line(line)
+
     {
-      c1 + (if M.check1(data), do: 1, else: 0),
-      c2 + (if M.check2(data), do: 1, else: 0)
+      c1 + if(M.check1(data), do: 1, else: 0),
+      c2 + if(M.check2(data), do: 1, else: 0)
     }
   end)
 
