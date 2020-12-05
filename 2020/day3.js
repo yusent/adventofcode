@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-fs.readFile('day3-input', 'utf8', (_, data) => {
+fs.readFile('input/day3', 'utf8', (_, data) => {
   const rows = data.trim().split('\n');
   const height = rows.length;
   const width = rows[0].length;

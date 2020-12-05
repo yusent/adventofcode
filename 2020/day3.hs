@@ -1,6 +1,6 @@
 main :: IO ()
 main = do
-  rows <- lines <$> readFile "day3-input"
+  rows <- lines <$> readFile "input/day3"
   let width = length $ head rows
       count = countTrees width rows 0 0
       part1 = count 3 1

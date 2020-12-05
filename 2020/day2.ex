@@ -20,7 +20,7 @@ defmodule M do
   end
 end
 
-{:ok, input} = File.read("day2-input")
+{:ok, input} = File.read("input/day2")
 
 {count1, count2} =
   input

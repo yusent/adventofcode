@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-fs.readFile('day2-input', 'utf8', (_, data) => {
+fs.readFile('input/day2', 'utf8', (_, data) => {
   const cases = data.trim().split('\n').map(parseLine);
 
   console.log('Part 1:', count(cases, check1));

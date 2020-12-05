@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-fs.readFile('day4-input', 'utf8', (_, data) => {
+fs.readFile('input/day4', 'utf8', (_, data) => {
   const [part1, part2] = data.trim().split('\n\n').reduce(([c1, c2], str) => {
     const passport = parsePassport(str);
     const passedCheck1 = check1(passport);
