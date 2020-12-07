@@ -22,13 +22,7 @@ const parseLine = line => {
   return {
     [color]: contents.split(', ').reduce((acc, content) => {
       const match = content.match(/^(\d+) (\S+ \S+) bags?$/);
-
-      if (match) {
-        const [_, qty, subColor] = match;
-        return { ...acc, [subColor]: qty };
-      } else {
-        return acc;
-      }
+      return match ? { ...acc, [match[2]]: match[1] } : acc;
     }, {}),
   };
 };
