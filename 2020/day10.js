@@ -21,8 +21,9 @@ fs.readFile('input/day10', 'utf8', (_, data) => {
 
     let ans = 0;
 
-    for (let j = i + 1; j < adapters.length && adapters[j] - adapters[i] <= 3; j++)
-      ans += countArrangementsFrom(j, possibleArrangements);
+    for (let j = i + 1; j < adapters.length; j++)
+      if (adapters[j] - adapters[i] <= 3)
+        ans += countArrangementsFrom(j, possibleArrangements);
 
     possibleArrangements[i] = ans
     return ans;
