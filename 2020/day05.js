@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-fs.readFile('input/day5', 'utf8', (_, data) => {
+fs.readFile('input/day05', 'utf8', (_, data) => {
   const seats = data.trim().split('\n').map(seatID).sort((a, b) => b - a);
 
   console.log('Part 1:', seats[0]);

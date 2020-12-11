@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-fs.readFile('input/day7', 'utf8', (_, data) => {
+fs.readFile('input/day07', 'utf8', (_, data) => {
   const colors = data.trim().split('\n').reduce((acc, line) => ({
     ...acc,
     ...parseLine(line)

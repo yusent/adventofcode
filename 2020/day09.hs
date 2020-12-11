@@ -3,7 +3,7 @@ import Data.List (tails)
 
 main :: IO ()
 main = do
-  numbers <- map read . lines <$> readFile "input/day9"
+  numbers <- map read . lines <$> readFile "input/day09"
   let invalidNumber = findInvalid numbers
       weaknessSubList = findWeaknessSubList invalidNumber numbers
       weakness = minimum weaknessSubList + maximum weaknessSubList

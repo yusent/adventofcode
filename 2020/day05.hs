@@ -9,7 +9,7 @@ main = do
         | a + 1 == b = findMissing (b : rest)
         | otherwise = a + 1
 
-  seats <- sort . map seatID . lines <$> readFile "input/day5"
+  seats <- sort . map seatID . lines <$> readFile "input/day05"
 
   putStrLn $ "Part 1: " ++ show (last seats)
   putStrLn $ "Part 2: " ++ show (findMissing seats)

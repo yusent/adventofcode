@@ -2,7 +2,7 @@ import Data.Char (isDigit, isHexDigit)
 
 main :: IO ()
 main = do
-  (c1, c2) <- countValid . parsePassports <$> readFile "input/day4"
+  (c1, c2) <- countValid . parsePassports <$> readFile "input/day04"
 
   putStrLn $ "Part 1: " ++ show c1
   putStrLn $ "Part 2: " ++ show c2

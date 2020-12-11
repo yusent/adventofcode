@@ -48,7 +48,7 @@ defmodule M do
 end
 
 {count1, count2} =
-  "input/day4"
+  "input/day04"
   |> File.read!()
   |> String.trim()
   |> String.split("\n\n")
