@@ -2,7 +2,7 @@ import Data.Char (isDigit)
 
 main :: IO ()
 main = do
-  (c1, c2) <- foldl count (0, 0) . lines <$> readFile "input/day2"
+  (c1, c2) <- foldl count (0, 0) . lines <$> readFile "input/day02"
   putStrLn $ "Part 1: " ++ show c1 ++ "\nPart 2: " ++ show c2
 
 count :: (Int, Int) -> String -> (Int, Int)
