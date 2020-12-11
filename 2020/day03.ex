@@ -17,8 +17,13 @@ defmodule M do
   end
 end
 
-{:ok, input} = File.read("input/day03")
-count = input |> String.trim() |> String.split("\n") |> M.counter()
+count =
+  "input/day03"
+  |> File.read!()
+  |> String.trim()
+  |> String.split("\n")
+  |> M.counter()
+
 part1 = count.(3, 1)
 part2 = part1 * count.(1, 1) * count.(5, 1) * count.(7, 1) * count.(1, 2)
 

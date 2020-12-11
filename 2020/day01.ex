@@ -22,10 +22,9 @@ defmodule M do
   end
 end
 
-{:ok, input} = File.read("input/day01")
-
 expenses =
-  input
+  "input/day01"
+  |> File.read!()
   |> String.trim()
   |> String.split("\n")
   |> Enum.map(&String.to_integer/1)

@@ -20,10 +20,9 @@ defmodule M do
   end
 end
 
-{:ok, input} = File.read("input/day02")
-
 {count1, count2} =
-  input
+  "input/day02"
+  |> File.read!()
   |> String.trim()
   |> String.split("\n")
   |> Enum.reduce({0, 0}, fn line, {c1, c2} ->
