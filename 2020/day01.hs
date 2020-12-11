@@ -3,7 +3,7 @@ import qualified Data.Map.Strict as M (Map, (!), empty, insert, member)
 
 main :: IO ()
 main = do
-  expenses <- map read . lines <$> readFile "input/day1"
+  expenses <- map read . lines <$> readFile "input/day01"
   putStr "Part 1: "
   print $ findPairMultiplication empty expenses
   putStr "Part 2: "

@@ -22,7 +22,7 @@ defmodule M do
   end
 end
 
-{:ok, input} = File.read("input/day1")
+{:ok, input} = File.read("input/day01")
 
 expenses =
   input

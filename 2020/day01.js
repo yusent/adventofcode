@@ -1,6 +1,6 @@
 const fs = require('fs');
 
-fs.readFile('input/day1', 'utf8', (_, data) => {
+fs.readFile('input/day01', 'utf8', (_, data) => {
   const expenses = data.split('\n').map(Number);
   console.log('Part 1:', findPairMultiplication(expenses));
   console.log('Part 2:', findTripleMultiplication(expenses));
