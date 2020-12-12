@@ -5,8 +5,8 @@ type Layout = Vector (Int, Vector (Int, Char))
 main :: IO ()
 main = do
   layout <- makeVector . map makeVector . lines <$> readFile "input/day11"
-  print $ count False layout
-  print $ count True layout
+  putStrLn . ("Part 1: " ++) . show $ count False layout
+  putStrLn . ("Part 2: " ++) . show $ count True layout
   where
     makeVector = fromList . zip [0..]
 
