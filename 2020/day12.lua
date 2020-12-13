@@ -43,8 +43,8 @@ function main ()
   local waypoint = {10, 1}
 
   for line in io.lines("input/day12") do
-    cmd = string.sub(line, 1, 1)
-    arg = tonumber(string.sub(line, 2))
+    local cmd = string.sub(line, 1, 1)
+    local arg = tonumber(string.sub(line, 2))
     pos1, dir_idx = move1(pos1, dir_idx, cmd, arg)
     pos2, waypoint = move2(pos2, waypoint, cmd, arg)
   end
