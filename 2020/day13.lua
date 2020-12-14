@@ -7,7 +7,7 @@ function mult_inv(a, b)
 
   while a > 1 do
     x0, x1 = x1 - math.floor(a / b) * x0, x0
-    a, b = b, math.fmod(a, b)
+    a, b = b, a % b
   end
 
   return x1 % b0
@@ -24,7 +24,7 @@ function chinese_remainder (n, a)
     sum = sum + a[i] * mult_inv(p, n[i]) * p
   end
 
-  return math.fmod(sum, prod)
+  return sum % prod
 end
 
 function main ()
