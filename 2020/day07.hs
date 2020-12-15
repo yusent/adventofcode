@@ -19,7 +19,7 @@ parseLines :: Bags -> String -> Bags
 parseLines bags line = M.insert colorName (parseContents contents) bags
   where
     contents = splitOn ", " contentString
-    [colorName, contentString] = splitOn " bags contain " $ line
+    [colorName, contentString] = splitOn " bags contain " line
     parseContents (content : rest)
       | isDigit (head content) =
         let (qty : subColorWords) = take 3 $ words content
