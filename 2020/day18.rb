@@ -1,19 +1,14 @@
-def eval1(str)
-  str.sub!(/\([^()]*\)/) { |m| eval1(m[1..-2]) } while str =~ /\(/
-  str.sub!(/^\d+\s+.\s+\d+/) { |m| eval(m).to_s } while str =~ /^\d+\s+.\s+\d+/
-  str
+def eval_(s, p2 = false)
+  s.sub!(/\([^()]*\)/) { |m| eval_(m[1..-2], p2) } while s =~ /\(/
+  s.sub!(/\d+\s+.\s+\d+/) { |m| eval(m).to_s } while !p2 && s =~ /\d+\s+./
+  s.sub!(/\d+\s+\+\s+\d+/) { |m| eval(m).to_s } while p2 && s =~ /\d+\s+\+/
+  s.sub!(/\d+\s+\*\s+\d+/) { |m| eval(m).to_s } while p2 && s =~ /\d+\s+\*/
+  s
 end
 
-def eval2(str)
-  str.sub!(/\([^()]*\)/) { |m| eval2(m[1..-2]) } while str =~ /\(/
-  str.sub!(/\d+\s+\+\s+\d+/) { |m| eval(m).to_s } while str =~ /\d+\s+\+\s+\d+/
-  str.sub!(/\d+\s+\*\s+\d+/) { |m| eval(m).to_s } while str =~ /\d+\s+\*\s+\d+/
-  str
+c1, c2 = File.read("input/day18").chomp.split("\n").reduce([0, 0]) do |x, line|
+  [x[0] + eval_(line.dup).to_i, x[1] + eval_(line, true).to_i]
 end
 
-s, z = File.read("input/day18").chomp.split("\n").reduce([0, 0]) do |x, line|
-  [x[0] + eval1(line.dup).to_i, x[1] + eval2(line).to_i]
-end
-
-puts "Part 1: #{s}"
-puts "Part 2: #{z}"
+puts "Part 1: #{c1}"
+puts "Part 2: #{c2}"
