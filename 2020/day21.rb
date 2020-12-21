@@ -11,7 +11,7 @@ File.read("input/day21").chomp.split("\n").each do |line|
     ingredient
   end)
 
-  allergens_str.split(', ').each do |allergen|
+  allergens_str.split(", ").each do |allergen|
     allergens[allergen] = allergens.has_key?(allergen) \
       ? allergens[allergen] & ingredients_set \
       : ingredients_set
@@ -32,4 +32,4 @@ loop do
 end
 
 puts "Part 1: #{ingredients.values.sum}"
-puts "Part 2: #{allergens.keys.sort.map { |k| allergens[k] }.join(",")}"
+puts "Part 2: #{allergens.sort.map { |_, v| v }.join(",")}"
