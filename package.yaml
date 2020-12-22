@@ -1,0 +1,16 @@
+name:    adventofcode
+version: "0.0.0"
+
+dependencies:
+
+# Due to a bug in GHC 8.0.1, we block its usage
+# See: https://ghc.haskell.org/trac/ghc/ticket/12130
+- base
+- bitwise
+- split
+- vector
+
+# The library contains all of our application code. The executable
+# defined below is just a thin wrapper.
+library:
+  source-dirs: "2020"

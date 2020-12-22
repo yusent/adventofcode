@@ -1,0 +1,23 @@
+cabal-version: 1.12
+
+-- This file has been generated from package.yaml by hpack version 0.33.0.
+--
+-- see: https://github.com/sol/hpack
+--
+-- hash: fb111f869c48e3e42f809f74048d4573620e766e7ca84ba470f0b43328092f40
+
+name:           adventofcode
+version:        0.0.0
+build-type:     Simple
+
+library
+  other-modules:
+      Paths_adventofcode
+  hs-source-dirs:
+      2020
+  build-depends:
+      base
+    , bitwise
+    , split
+    , vector
+  default-language: Haskell2010
