@@ -21,7 +21,7 @@ exec ops input output index = case opCode of
   where
     (mode, opCode) = op 0 `divMod` 100
     op n = ops ! (index + n)
-    op' n = if (modes !! (n - 1) == 0) then ops ! op n else op n
+    op' n = if modes !! (n - 1) == 0 then ops ! op n else op n
     modes = modes' mode
     modes' m = let (d, r) = m `divMod` 10 in r : modes' d
     storeAt addressOp value = ops // [(op addressOp, value)]
