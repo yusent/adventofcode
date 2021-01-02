@@ -1,17 +1,15 @@
 import Control.Monad (guard)
 import Data.List (nub)
-import Data.List.Split (splitOn)
 import Data.Maybe (fromJust)
-import Data.Vector (Vector, fromList)
-import IntCode (State(..), addInput, execUntilHalt, getOutput, run)
+import IntCode (Instructions, State(..), addInput, execUntilHalt, getOutput, load, run)
 
 main :: IO ()
 main = do
-  ops <- fromList . map read . splitOn "," <$> readFile "input/day07"
+  ops <- load <$> readFile "input/day07"
   putStrLn $ "Part 1: " ++ show (findLargestOutput ops)
   putStrLn $ "Part 2: " ++ show (findLargestOutput' ops)
 
-findLargestOutput :: Vector Int -> Int
+findLargestOutput :: Instructions -> Int
 findLargestOutput ops = maximum $ do
   a <- [0..4]
   b <- [0..4]
@@ -27,7 +25,7 @@ findLargestOutput ops = maximum $ do
   guard $ nub amps == amps
   return outputE
 
-findLargestOutput' :: Vector Int -> Int
+findLargestOutput' :: Instructions -> Int
 findLargestOutput' ops = maximum $ do
   a <- [5..9]
   b <- [5..9]
