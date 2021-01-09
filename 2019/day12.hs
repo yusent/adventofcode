@@ -1,52 +1,37 @@
-import Control.Monad (mapM_)
+import Data.List (transpose)
 import Data.List.Split (splitOn)
-import Data.Set (Set, empty, insert, member)
+import Data.Set (Set, empty, insert, member, size)
 
-data Vector = Vector { x :: Int, y :: Int, z :: Int } deriving (Eq, Ord)
-data Moon = Moon { pos :: Vector, vel :: Vector } deriving (Eq, Ord)
+type Axis = [(Int, Int)]
+type State = [Axis]
 
 main :: IO ()
 main = do
-  moons <- map parseMoon . lines <$> readFile "input/day12"
-  let after1000steps = foldl (\acc _ -> nextStep acc) moons [1..1000]
-  putStrLn $ "Part 1: " ++ show (sum $ energy <$> after1000steps)
-  putStrLn $ "Part 2: " ++ show (stepsUntilRepetition empty 0 moons)
+  initialState <- parseState <$> readFile "input/day12"
+  let after1000steps = iterate (map nextStep) initialState !! 1000
+  putStrLn $ "Part 1: " ++ show (energy after1000steps)
+  putStrLn $ "Part 2: " ++ show (stepsUntilRepetition initialState)
 
-parseMoon :: String -> Moon
-parseMoon = buildMoon . map (read . drop 2) . splitOn ", " . init . tail
+parseState :: String -> State
+parseState = transpose . map pm . lines
   where
-    buildMoon [x, y, z] = Moon (Vector x y z) $ Vector 0 0 0
+    pm = flip zip (repeat 0) . map (read . drop 2) . splitOn ", " . init . tail
 
-nextStep :: [Moon] -> [Moon]
-nextStep moons = applyGravity . updateVelocity <$> moons
+nextStep :: Axis -> Axis
+nextStep posVels = do
+  (pos, vel) <- posVels
+  let vel' = (vel +) . sum $ signum . subtract pos . fst <$> posVels
+  return (pos + vel', vel')
+
+energy :: State -> Int
+energy axes = sum $ moonEnergy <$> transpose axes
   where
-    applyGravity (Moon p v) = Moon (add p v) v
-    updateVelocity (Moon p v) = Moon p . foldl add v $ offsets p . pos <$> moons
+    moonEnergy axes = sum (abs . fst <$> axes) * sum (abs . snd <$> axes)
 
-add :: Vector -> Vector -> Vector
-add (Vector x y z) (Vector x' y' z') = Vector (x + x') (y + y') (z + z')
+axisStepsUntilRepetition :: Set Axis -> Axis -> Int
+axisStepsUntilRepetition prev axis
+  | axis `member` prev = size prev
+  | otherwise = axisStepsUntilRepetition (insert axis prev) $ nextStep axis
 
-offsets :: Vector -> Vector -> Vector
-offsets (Vector x y z) (Vector x' y' z') =
-  Vector (cmp x x') (cmp y y') (cmp z z')
-  where
-    cmp a b
-      | a < b = 1
-      | a > b = -1
-      | otherwise = 0
-
-energy :: Moon -> Int
-energy (Moon (Vector x y z) (Vector x' y' z')) = potential * kinetic
-  where
-    potential = abs x + abs y + abs z
-    kinetic = abs x' + abs y' + abs z'
-
-stepsUntilRepetition :: Set [Moon] -> Int -> [Moon] -> Int
-stepsUntilRepetition prevStates steps moons
-  | moons `member` prevStates = steps
-  | otherwise = stepsUntilRepetition (insert moons prevStates) (steps + 1)
-              $ nextStep moons
-
-printMoon :: Moon -> IO ()
-printMoon (Moon (Vector x y z) (Vector x' y' z')) = do
-  putStrLn $ "pos=<x=" ++ show x ++ ",y=" ++ show y ++ ",z=" ++ show z ++ ">, vel=<x=" ++ show x' ++ ",y=" ++ show y' ++ ",z=" ++ show z' ++ ">"
+stepsUntilRepetition :: State -> Int
+stepsUntilRepetition = foldl lcm 1 . map (axisStepsUntilRepetition empty)
