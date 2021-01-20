@@ -26,10 +26,10 @@ playGame :: [Int] -> Int -> Screen -> State -> IO ()
 playGame inputs score screen state = do
   let (newScore, newScreen) = move score screen $ getOutput state
   case (inputs, state) of
-    ((input : inputs'), WaitingForInput _ _ _ _ _) -> do
+    (input : inputs', WaitingForInput {}) -> do
       playGame inputs' newScore newScreen . run $ addInput state input
 
-    ([], WaitingForInput _ _ _ _ _) -> do
+    ([], WaitingForInput {}) -> do
       putStrLn $ "SCORE: " ++ show newScore
       putStrLn $ screenToString newScreen
       putStrLn "Insert Input:"
