@@ -2,6 +2,7 @@ module IntCode
   ( Instructions
   , State(..)
   , addInput
+  , changeInstructionAt
   , execUntilHalt
   , getOutput
   , load
@@ -29,6 +30,9 @@ addInput (Initial ops input) x = Initial ops (input ++ [x])
 addInput (WaitingForInput ops index rBase input output) x =
   WaitingForInput ops index rBase (input ++ [x]) output
 addInput (Halted output) _ = Halted output
+
+changeInstructionAt :: Int -> Int -> Instructions -> Instructions
+changeInstructionAt = insert
 
 getOutput :: State -> Output
 getOutput (WaitingForInput _ _ _ _ output) = output
