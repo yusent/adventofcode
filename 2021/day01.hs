@@ -2,15 +2,10 @@ import Data.List (tails)
 
 main = do
   depths <- map read . lines <$> readFile "input/day01"
-  putStrLn $ "Part 1: " ++ show (countIncrements depths)
-  putStrLn $ "Part 2: " ++ show (countWindowIncrements depths)
+  putStrLn $ "Part 1: " ++ show (countIncrements 1 depths)
+  putStrLn $ "Part 2: " ++ show (countIncrements 3 depths)
 
-countWindowIncrements =
-  countIncrements . map sum . filter ((>2) . length) . map (take 3) . tails
-
-countIncrements :: [Int] -> Int
-countIncrements (x : xs) = countIncrements' 0 x xs
-
-countIncrements' count _ [] = count
-countIncrements' count prev (x : xs) =
-  countIncrements' (count + fromEnum (x > prev)) x xs
+countIncrements windowSize xs = fst $ foldl count (0, firstWindow) windows
+  where
+    (firstWindow : windows) = sum . take windowSize <$> tails xs
+    count (acc, prev) x = (acc + fromEnum (x > prev), x)
