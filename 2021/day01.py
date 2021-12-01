@@ -1,22 +1,18 @@
-depths = list(map(int, open("input/day01", "r").read().split()))
-prev = depths[0]
-prev_window = sum(depths[:3])
-increments = 0
-window_increments = 0
+def count_increments(window_size, xs):
+    increments = 0
+    prev = sum(xs[:window_size])
 
-for i in range(1, len(depths)):
-    if depths[i] > prev:
-        increments += 1
+    for i in range(1, len(xs) - window_size + 1):
+        s = sum(xs[i:i+window_size])
 
-    prev = depths[i]
+        if s > prev:
+            increments += 1
 
-    if i + 2 < len(depths):
-        window = sum(depths[i:i+3])
+        prev = s
 
-        if window > prev_window:
-            window_increments += 1
+    return increments
 
-        prev_window = window
-
-print("Part 1:", increments)
-print("Part 2:", window_increments)
+if __name__ == "__main__":
+    depths = list(map(int, open("input/day01", "r").read().split()))
+    print("Part 1:", count_increments(1, depths))
+    print("Part 2:", count_increments(3, depths))
