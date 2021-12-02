@@ -1,16 +1,5 @@
-def count_increments(window_size, xs):
-    increments = 0
-    prev = sum(xs[:window_size])
-
-    for i in range(1, len(xs) - window_size + 1):
-        s = sum(xs[i:i+window_size])
-
-        if s > prev:
-            increments += 1
-
-        prev = s
-
-    return increments
+def count_increments(w, xs):
+    return sum(1 if xs[i] > xs[i-w] else 0 for i in range(w, len(xs)))
 
 if __name__ == "__main__":
     depths = list(map(int, open("input/day01", "r").read().split()))
