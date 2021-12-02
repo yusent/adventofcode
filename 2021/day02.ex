@@ -1,5 +1,20 @@
-defmodule Solution do
-  def exec(commands, acc) do
+defmodule Day02 do
+  def solve() do
+    commands =
+      "input/day02"
+      |> File.read!()
+      |> String.trim()
+      |> String.split("\n")
+      |> Enum.map(fn cmd ->
+        [command, steps] = String.split(cmd)
+        {command, String.to_integer(steps)}
+      end)
+
+    IO.inspect(exec(commands, {0, 0}), label: "Part 1")
+    IO.inspect(exec(commands, {0, 0, 0}), label: "Part 2")
+  end
+
+  defp exec(commands, acc) do
     state = Enum.reduce(commands, acc, &run/2)
     elem(state, 0) * elem(state, 1)
   end
@@ -12,15 +27,4 @@ defmodule Solution do
   defp run({"up", x}, {h, d, aim}), do: {h, d, aim - x}
 end
 
-commands =
-  "input/day02"
-  |> File.read!()
-  |> String.trim()
-  |> String.split("\n")
-  |> Enum.map(fn cmd ->
-    [command, steps] = String.split(cmd)
-    {command, String.to_integer(steps)}
-  end)
-
-IO.inspect(Solution.exec(commands, {0, 0}), label: "Part 1")
-IO.inspect(Solution.exec(commands, {0, 0, 0}), label: "Part 2")
+Day02.solve()

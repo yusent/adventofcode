@@ -1,5 +1,17 @@
-defmodule Solution do
-  def count_increments(window_size, xs) do
+defmodule Day01 do
+  def solve() do
+    depths =
+      "input/day01"
+      |> File.read!()
+      |> String.trim()
+      |> String.split("\n")
+      |> Enum.map(&String.to_integer/1)
+
+    IO.inspect(count_increments(1, depths), label: "Part 1")
+    IO.inspect(count_increments(3, depths), label: "Part 2")
+  end
+
+  defp count_increments(window_size, xs) do
     [first_window | windows] = window_sums(window_size, xs)
 
     windows
@@ -16,12 +28,4 @@ defmodule Solution do
   end
 end
 
-depths =
-  "input/day01"
-  |> File.read!()
-  |> String.trim()
-  |> String.split("\n")
-  |> Enum.map(&String.to_integer/1)
-
-IO.inspect(Solution.count_increments(1, depths), label: "Part 1")
-IO.inspect(Solution.count_increments(3, depths), label: "Part 2")
+Day01.solve()
