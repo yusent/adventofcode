@@ -1,42 +1,31 @@
-def exec1(commands):
-    d = 0
-    x = 0
+def exec(commands, part2=False):
+    state = { 'h': 0, 'd': 0, 'a': 0 }
+    run = run2 if part2 else run1
 
     for command in commands:
-        s = command.split(' ')
-        direction = s[0]
-        steps = int(s[1])
+        direction, x = command.split(' ')
+        run(state, direction, int(x))
 
-        if direction == 'forward':
-            x += steps
-        elif direction == 'down':
-            d += steps
-        else:
-            d -= steps
+    return state['h'] * state['d']
 
-    return d * x
+def run1(state, direction, x):
+    if direction == 'forward':
+        state['h'] += x
+    elif direction == 'down':
+        state['d'] += x
+    else:
+        state['d'] -= x
 
-def exec2(commands):
-    d = 0
-    x = 0
-    aim = 0
-
-    for command in commands:
-        s = command.split(' ')
-        direction = s[0]
-        steps = int(s[1])
-
-        if direction == 'forward':
-            x += steps
-            d += aim * steps
-        elif direction == 'down':
-            aim += steps
-        else:
-            aim -= steps
-
-    return d * x
+def run2(state, direction, x):
+    if direction == 'forward':
+        state['h'] += x
+        state['d'] += state['a'] * x
+    elif direction == 'down':
+        state['a'] += x
+    else:
+        state['a'] -= x
 
 if __name__ == "__main__":
     commands = open("input/day02", "r").read().strip().split('\n')
-    print("Part 1:", exec1(commands))
-    print("Part 2:", exec2(commands))
+    print("Part 1:", exec(commands))
+    print("Part 2:", exec(commands, True))
