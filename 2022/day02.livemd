@@ -1,0 +1,67 @@
+# Day 2
+
+```elixir
+Mix.install([:kino])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+```elixir
+defmodule RockPaperScissors do
+  @winning_combos %{"A" => "C", "B" => "A", "C" => "B"}
+  @losing_combos Map.new(@winning_combos, fn {key, val} -> {val, key} end)
+  @hand_values %{"A" => 1, "B" => 2, "C" => 3}
+
+  def score(my_hand, opponent_hand) do
+    @hand_values[my_hand] + score_round(my_hand, opponent_hand)
+  end
+
+  def losing_hand_against(hand), do: @winning_combos[hand]
+
+  def winning_hand_against(hand), do: @losing_combos[hand]
+
+  defp score_round(hand, hand), do: 3
+
+  defp score_round(my_hand, opponent_hand) do
+    if @winning_combos[my_hand] == opponent_hand, do: 6, else: 0
+  end
+end
+
+rounds =
+  input
+  |> Kino.Input.read()
+  |> String.split()
+  |> Enum.chunk_every(2)
+```
+
+## Part 1
+
+```elixir
+conversions = %{"X" => "A", "Y" => "B", "Z" => "C"}
+
+rounds
+|> Enum.map(fn [opponent_hand, my_hand] ->
+  RockPaperScissors.score(conversions[my_hand], opponent_hand)
+end)
+|> Enum.sum()
+```
+
+## Part 2
+
+```elixir
+rounds
+|> Enum.map(fn [opponent_hand, strategy] ->
+  strategy
+  |> case do
+    "X" -> RockPaperScissors.losing_hand_against(opponent_hand)
+    "Y" -> opponent_hand
+    "Z" -> RockPaperScissors.winning_hand_against(opponent_hand)
+  end
+  |> RockPaperScissors.score(opponent_hand)
+end)
+|> Enum.sum()
+```
