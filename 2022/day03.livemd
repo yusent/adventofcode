@@ -1,0 +1,59 @@
+# Day 3
+
+```elixir
+Mix.install([:kino])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+## Pre-work
+
+```elixir
+defmodule Rucksacks do
+  def item_in_both_compartments(rucksack) do
+    compartment_size = rucksack |> length |> div(2)
+    {comp0, comp1} = Enum.split(rucksack, compartment_size)
+    comp0_set = MapSet.new(comp0)
+    Enum.find(comp1, &MapSet.member?(comp0_set, &1))
+  end
+
+  def in_common([s0, s1 | ss]), do: in_common([MapSet.intersection(s0, s1) | ss])
+  def in_common([s]), do: s |> MapSet.to_list() |> hd()
+
+  def item_priority(item) when item >= ?a and item <= ?z, do: item - ?a + 1
+  def item_priority(item), do: item - ?A + 27
+end
+
+rucksacks =
+  input
+  |> Kino.Input.read()
+  |> String.split("\n")
+  |> Enum.map(&String.to_charlist/1)
+```
+
+## Part 1
+
+```elixir
+rucksacks
+|> Enum.map(fn rucksack ->
+  rucksack
+  |> Rucksacks.item_in_both_compartments()
+  |> Rucksacks.item_priority()
+end)
+|> Enum.sum()
+```
+
+## Part 2
+
+```elixir
+rucksacks
+|> Enum.map(&MapSet.new/1)
+|> Enum.chunk_every(3)
+|> Enum.map(&Rucksacks.in_common/1)
+|> Enum.map(&Rucksacks.item_priority/1)
+|> Enum.sum()
+```
