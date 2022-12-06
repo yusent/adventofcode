@@ -1,0 +1,43 @@
+# Day 6
+
+```elixir
+Mix.install([:kino])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+## Pre-work
+
+```elixir
+defmodule Markers do
+  def find(data, size) do
+    if data |> Enum.take(size) |> MapSet.new() |> MapSet.size() == size do
+      size
+    else
+      1 + find(tl(data), size)
+    end
+  end
+end
+
+data =
+  input
+  |> Kino.Input.read()
+  |> String.trim()
+  |> String.to_charlist()
+```
+
+## Part 1
+
+```elixir
+Markers.find(data, 4)
+```
+
+## Part 2
+
+```elixir
+Markers.find(data, 14)
+```
