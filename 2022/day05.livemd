@@ -1,0 +1,64 @@
+# Day 5
+
+```elixir
+Mix.install([:kino, :qex])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+## Pre-work
+
+```elixir
+defmodule Stacks do
+  def top_crates(stacks) do
+    1..Enum.count(stacks) |> Enum.map(&hd(stacks[&1])) |> List.to_string()
+  end
+
+  def process_moves(stacks, moves, reverse \\ false) do
+    Enum.reduce(moves, stacks, fn {qty, i, j}, acc ->
+      {removed, remaining} = Enum.split(acc[i], qty)
+      to_add = if reverse, do: Enum.reverse(removed), else: removed
+      %{acc | i => remaining, j => to_add ++ acc[j]}
+    end)
+  end
+end
+
+[stacks_section, moves_section] = input |> Kino.Input.read() |> String.split("\n\n")
+[numbers_row | elements_rows] = stacks_section |> String.split("\n") |> Enum.reverse()
+stacks_len = numbers_row |> String.split() |> List.last() |> String.to_integer()
+empty_stacks = Map.new(1..stacks_len, fn i -> {i, []} end)
+
+stacks =
+  Enum.reduce(elements_rows, empty_stacks, fn row, stacks_0 ->
+    char_list = String.to_charlist(row)
+
+    Enum.reduce(1..stacks_len, stacks_0, fn i, stacks_1 ->
+      c = Enum.at(char_list, (i - 1) * 4 + 1)
+      if c == 32, do: stacks_1, else: Map.update!(stacks_1, i, &[c | &1])
+    end)
+  end)
+
+moves =
+  moves_section
+  |> String.split()
+  |> Enum.chunk_every(6)
+  |> Enum.map(fn [_, qty, _, i, _, j] ->
+    {String.to_integer(qty), String.to_integer(i), String.to_integer(j)}
+  end)
+```
+
+## Part 1
+
+```elixir
+stacks |> Stacks.process_moves(moves, true) |> Stacks.top_crates()
+```
+
+## Part 2
+
+```elixir
+stacks |> Stacks.process_moves(moves) |> Stacks.top_crates()
+```
