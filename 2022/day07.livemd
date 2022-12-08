@@ -1,0 +1,53 @@
+# Day 7
+
+```elixir
+Mix.install([:kino])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+## Pre-work
+
+```elixir
+defmodule FileSystem do
+  def new(commands) do
+    Enum.reduce(commands, {%{[] => 0}, []}, fn
+      ["$", "cd", ".."], {fs, [_ | path]} -> {fs, path}
+      ["$", "cd", "/"], {fs, _} -> {fs, []}
+      ["$", "cd", dir], {fs, path} -> {fs, [dir | path]}
+      ["$", "ls"], {fs, path} -> {fs, path}
+      ["dir", dir], {fs, path} -> {Map.put_new(fs, [dir | path], 0), path}
+      [size, _], {fs, path} -> {add(fs, path, String.to_integer(size)), path}
+    end)
+  end
+
+  def add(fs, [], size), do: Map.update!(fs, [], &(&1 + size))
+  def add(fs, path, size), do: fs |> Map.update!(path, &(&1 + size)) |> add(tl(path), size)
+end
+
+{fs, _} =
+  input
+  |> Kino.Input.read()
+  |> String.split("\n")
+  |> Enum.map(&String.split/1)
+  |> FileSystem.new()
+
+dir_sizes = Map.values(fs)
+```
+
+## Part 1
+
+```elixir
+dir_sizes |> Enum.filter(&(&1 <= 100_000)) |> Enum.sum()
+```
+
+## Part 2
+
+```elixir
+space_to_free = 30_000_000 - 70_000_000 + fs[[]]
+dir_sizes |> Enum.filter(&(&1 >= space_to_free)) |> Enum.min()
+```
