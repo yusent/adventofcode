@@ -1,0 +1,67 @@
+# Day 9
+
+```elixir
+Mix.install([:kino])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+## Pre-work
+
+```elixir
+defmodule Rope do
+  def move([{hx, hy}], dx, dy), do: [{hx + dx, hy + dy}]
+
+  def move([{hx, hy} | [{tx, ty} | _] = tail], dx, dy) do
+    diff_x = hx + dx - tx
+    diff_y = hy + dy - ty
+
+    tail =
+      if abs(diff_x) > 1 or abs(diff_y) > 1 do
+        move(
+          tail,
+          if(diff_x == 0, do: 0, else: div(diff_x, abs(diff_x))),
+          if(diff_y == 0, do: 0, else: div(diff_y, abs(diff_y)))
+        )
+      else
+        tail
+      end
+
+    [{hx + dx, hy + dy} | tail]
+  end
+end
+
+deltas = %{"U" => {0, 1}, "D" => {0, -1}, "R" => {1, 0}, "L" => {-1, 0}}
+rope = Enum.map(1..10, fn _ -> {0, 0} end)
+init_set = MapSet.new([{0, 0}])
+
+{_, p1_visited, p2_visited} =
+  input
+  |> Kino.Input.read()
+  |> String.split()
+  |> Enum.chunk_every(2)
+  |> Enum.reduce({rope, init_set, init_set}, fn [dir, steps], {rope, p1, p2} ->
+    {dx, dy} = deltas[dir]
+
+    Enum.reduce(1..String.to_integer(steps), {rope, p1, p2}, fn _, {rope, p1, p2} ->
+      [_, t1, _, _, _, _, _, _, _, t9] = moved_rope = Rope.move(rope, dx, dy)
+      {moved_rope, MapSet.put(p1, t1), MapSet.put(p2, t9)}
+    end)
+  end)
+```
+
+## Part 1
+
+```elixir
+MapSet.size(p1_visited)
+```
+
+## Part 2
+
+```elixir
+MapSet.size(p2_visited)
+```
