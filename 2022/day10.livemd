@@ -1,0 +1,51 @@
+# Day 10
+
+```elixir
+Mix.install([:kino])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+## Pre-work
+
+```elixir
+defmodule VS do
+  def tick({cycle, x, signal, screen}) do
+    new_signal = signal + if(rem(cycle + 1, 40) == 20, do: (cycle + 1) * x, else: 0)
+    {cycle + 1, x, new_signal, nxt_scrn(screen, cycle, x)}
+  end
+
+  def addx({c, x, sig, scrn}, v), do: {c, x + String.to_integer(v), sig, scrn}
+
+  defp nxt_scrn(screen, cycle, x) do
+    screen <>
+      if(rem(cycle, 40) in [x - 1, x, x + 1], do: "#", else: ".") <>
+      if(rem(cycle + 1, 40) == 0, do: "\n", else: "")
+  end
+end
+
+{_, _, signal, screen} =
+  input
+  |> Kino.Input.read()
+  |> String.split("\n")
+  |> Enum.reduce({0, 1, 0, ""}, fn
+    "noop", acc -> VS.tick(acc)
+    "addx " <> v, acc -> acc |> VS.tick() |> VS.tick() |> VS.addx(v)
+  end)
+```
+
+## Part 1
+
+```elixir
+signal
+```
+
+## Part 2
+
+```elixir
+IO.puts(screen)
+```
