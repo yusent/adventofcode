@@ -1,0 +1,106 @@
+# Day 12
+
+```elixir
+Mix.install([:kino, :qex])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+## Pre-work
+
+```elixir
+defmodule Climb do
+  def min_steps(grid, part2 \\ false) do
+    min_steps(
+      grid,
+      heights(grid),
+      initial_queue(grid, part2),
+      map_size(grid),
+      map_size(grid[0]),
+      MapSet.new()
+    )
+  end
+
+  def min_steps(grid, heights, q, h, w, visited) do
+    {{{i, j}, steps}, q} = Qex.pop!(q)
+
+    cond do
+      {i, j} in visited ->
+        min_steps(grid, heights, q, h, w, visited)
+
+      grid[i][j] == ?E ->
+        steps
+
+      true ->
+        q =
+          Enum.reduce([{-1, 0}, {0, -1}, {1, 0}, {0, 1}], q, fn {di, dj}, q ->
+            y = i + di
+            x = j + dj
+
+            if y >= 0 and y < h and x >= 0 and x < w and heights[y][x] <= 1 + heights[i][j] do
+              Qex.push(q, {{y, x}, steps + 1})
+            else
+              q
+            end
+          end)
+
+        min_steps(grid, heights, q, h, w, MapSet.put(visited, {i, j}))
+    end
+  end
+
+  defp heights(grid) do
+    grid
+    |> Enum.map(fn {i, row} ->
+      row
+      |> Enum.map(fn
+        {j, ?S} -> {j, ?a}
+        {j, ?E} -> {j, ?z}
+        tup -> tup
+      end)
+      |> then(&{i, Map.new(&1)})
+    end)
+    |> Map.new()
+  end
+
+  defp initial_queue(grid, part2) do
+    Enum.reduce(grid, Qex.new(), fn {i, row}, acc ->
+      Enum.reduce(row, acc, fn
+        {j, ?S}, acc -> Qex.push(acc, {{i, j}, 0})
+        {j, ?a}, acc when part2 -> Qex.push(acc, {{i, j}, 0})
+        _, acc -> acc
+      end)
+    end)
+  end
+end
+
+grid =
+  input
+  |> Kino.Input.read()
+  |> String.split()
+  |> Enum.with_index()
+  |> Enum.map(fn {line, i} ->
+    line
+    |> String.to_charlist()
+    |> Enum.with_index()
+    |> Enum.map(fn {c, j} -> {j, c} end)
+    |> Map.new()
+    |> then(&{i, &1})
+  end)
+  |> Map.new()
+```
+
+## Part 1
+
+```elixir
+Climb.min_steps(grid)
+```
+
+## Part 2
+
+```elixir
+Climb.min_steps(grid, true)
+```
