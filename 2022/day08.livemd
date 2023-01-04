@@ -1,0 +1,65 @@
+# Day 8
+
+```elixir
+Mix.install([:kino, :arrays])
+```
+
+## Input
+
+```elixir
+input = Kino.Input.textarea("")
+```
+
+## Pre-work
+
+```elixir
+defmodule Trees do
+  def new(input), do: input |> String.split() |> Enum.into(Arrays.new(), &parse_trees_row/1)
+
+  def count_visible_from(trees, i, j, y_range, x_range) do
+    Enum.reduce_while(y_range, {0, true}, fn ii, {cnt, _} ->
+      {cnt, visible} =
+        Enum.reduce_while(x_range, {cnt, true}, fn jj, {cnt, _} ->
+          if trees[ii][jj] < trees[i][j] do
+            {:cont, {cnt + 1, true}}
+          else
+            {:halt, {cnt + 1, false}}
+          end
+        end)
+
+      {if(visible, do: :cont, else: :halt), {cnt, visible}}
+    end)
+  end
+
+  defp parse_trees_row(str) do
+    str |> String.split("", trim: true) |> Enum.into(Arrays.new(), &String.to_integer/1)
+  end
+end
+
+trees = input |> Kino.Input.read() |> Trees.new()
+height = Arrays.size(trees)
+width = Arrays.size(trees[0])
+
+{max_score, visibles} =
+  Enum.reduce(0..(height - 1), {0, 0}, fn i, {max_score, visibles} ->
+    Enum.reduce(0..(width - 1), {max_score, visibles}, fn j, {max_score, visibles} ->
+      {l, l_v} = Trees.count_visible_from(trees, i, j, i..i, (j - 1)..0//-1)
+      {r, r_v} = Trees.count_visible_from(trees, i, j, i..i, (j + 1)..(width - 1)//1)
+      {u, u_v} = Trees.count_visible_from(trees, i, j, (i - 1)..0//-1, j..j)
+      {d, d_v} = Trees.count_visible_from(trees, i, j, (i + 1)..(height - 1)//1, j..j)
+      {max(max_score, l * r * u * d), visibles + if(l_v or r_v or u_v or d_v, do: 1, else: 0)}
+    end)
+  end)
+```
+
+## Part 1
+
+```elixir
+visibles
+```
+
+## Part 2
+
+```elixir
+max_score
+```
