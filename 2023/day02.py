@@ -1,15 +1,13 @@
 import re
 
-possigle_game_ids_sum = 0
-set_powers_sum = 0
+possigle_game_ids_sum = set_powers_sum = 0
+get_max = lambda color: max(map(int, re.findall(f'(\d+) {color}', game)))
 
 for game in open('input/day02', 'r').read().strip().split('\n'):
-    max_red = max(map(int, re.findall(r'(\d+) red', game)))
-    max_green = max(map(int, re.findall(r'(\d+) green', game)))
-    max_blue = max(map(int, re.findall(r'(\d+) blue', game)))
-    set_powers_sum += max_red * max_green * max_blue
+    r, g, b = map(get_max, ['red', 'green', 'blue'])
+    set_powers_sum += r * g * b
 
-    if max_red <= 12 and max_green <= 13 and max_blue <= 14:
+    if r <= 12 and g <= 13 and b <= 14:
         possigle_game_ids_sum += int(game.split(': ')[0][5:])
 
 print('Part 1: ', possigle_game_ids_sum)
