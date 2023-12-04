@@ -21,7 +21,7 @@ def number_on(y, x):
     end = num_end(y, x)
     return int(schematic[y][x:end])
 
-schematic = open('input/day03', 'r').read().strip().split('\n')
+schematic = open('input/day03', 'r').read().splitlines()
 h, w = len(schematic), len(schematic[0])
 sum_of_parts = 0
 sum_of_gear_ratios = 0

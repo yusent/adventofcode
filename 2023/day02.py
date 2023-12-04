@@ -3,7 +3,7 @@ import re
 possigle_game_ids_sum = set_powers_sum = 0
 get_max = lambda color: max(map(int, re.findall(f'(\d+) {color}', game)))
 
-for game in open('input/day02', 'r').read().strip().split('\n'):
+for game in open('input/day02', 'r').read().splitlines():
     r, g, b = map(get_max, ['red', 'green', 'blue'])
     set_powers_sum += r * g * b
 

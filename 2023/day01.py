@@ -17,6 +17,6 @@ def words_to_digits(line):
     if line[0].isdigit(): return line[0] + words_to_digits(line[1:])
     return words_to_digits(line[1:])
 
-calibration_data = open('input/day01', 'r').read().strip().split('\n')
+calibration_data = open('input/day01', 'r').read().splitlines()
 print('Part 1: ', sum(map(calibration_value, map(lambda x: re.sub(r'\D', '', x), calibration_data))))
 print('Part 2: ', sum(map(calibration_value, map(words_to_digits, calibration_data))))
